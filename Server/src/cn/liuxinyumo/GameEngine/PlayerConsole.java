@@ -21,10 +21,13 @@ class PlayerConsole {
 		//需要验证是否身份合法
 		if(!CheckID(s))
 			return;
-		Player p = new Player(s,roomConsole);
+		Player p = new Player(s,roomConsole,this);
 		players.add(p);
 	}
 	private boolean CheckID(Socket s){
 		return true;
+	}
+	public void Del(Player p){
+		players.remove(p);
 	}
 }

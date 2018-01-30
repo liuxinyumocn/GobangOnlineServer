@@ -20,10 +20,12 @@ class Room {
 	//private List<Player> Visited = null;	//观战列表
 	
 	private GameCore gameCore = null;	//游戏逻辑 每次对局均会重新被创建
+	private RoomConsole roomConsole;
 	
-	public Room(Player A,Player B){
+	public Room(Player A,Player B,RoomConsole roomCon){
 		this.A = new PlayerInfo(A,this);
 		this.B = new PlayerInfo(B,this);
+		this.roomConsole = roomCon;
 		Count = 0; 
 		Started = false; 
 		//RoomID = roomID;
@@ -82,6 +84,31 @@ class Room {
 			}
 			
 			this.RefalshStart();
+		}
+	}
+	
+	public void ExitRoom(Player p,boolean force){
+		PlayerInfo pi = this.GetPlayerInfo(p);
+		if(pi == null)
+			return; //无效棋手
+		
+		if(force == true){
+			//通知另一个玩家该玩家已经退出 房间失效
+			//如果在游戏中则结束游戏
+			if(A == pi){
+				A = null;
+				if(B != null)
+					B.RefalshReEnterRoom();
+				//A = null;
+			}else if(B == pi){
+				B = null;
+				if(A != null)
+					A.RefalshReEnterRoom();
+			}
+			if(A == null && B == null){
+				//房间解散
+				roomConsole.DelRoom(this);
+			}
 		}
 	}
 	
@@ -243,5 +270,8 @@ class PlayerInfo{
 	}
 	public void RefalshWinner(int r){
 		player.RefalshWinner(r);
+	}
+	public void RefalshReEnterRoom(){
+		player.RefalshReEnterRoom();
 	}
 }

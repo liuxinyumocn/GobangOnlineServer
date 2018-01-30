@@ -16,12 +16,13 @@ class Player {
 	private OutputStream out;
 	
 	private RoomConsole roomConsole;
-	
+	private PlayerConsole playerConsole;
 	private Room room;
 	
-	public Player(Socket s,RoomConsole roomConsole){
+	public Player(Socket s,RoomConsole roomConsole,PlayerConsole playercon){
 		socket = s;
 		this.roomConsole = roomConsole;
+		this.playerConsole = playercon;
 		thread = new Thread(new Self());
 		try{
 			in = s.getInputStream();
@@ -82,7 +83,7 @@ class Player {
 				output.Sent(Message);
 			}catch(Exception e){
 				Destructor();
-				e.printStackTrace();
+				//e.printStackTrace();
 			}
 		}
 	}
@@ -92,7 +93,18 @@ class Player {
 	}
 	
 	private void Destructor(){ //析构连接
-		
+		//该连接已经断开将清除该玩家
+		try{
+			synchronized(room){
+				room.ExitRoom(this,true);
+			}
+		}catch(Exception e){
+			
+		}
+		//移除自身在PlayerConsole中的信息
+		synchronized(playerConsole){
+			this.playerConsole.Del(this);
+		}
 	}
 	
 	public void SetRoom(Room r){
@@ -123,6 +135,10 @@ class Player {
 		}
 	}
 	private void ClientSetReady(String v){	//Client是来自客户的
+		if(room == null){
+			this.RefalshReEnterRoom();
+			return;
+		}
 		if(v.equals("1")){
 			//变更为准备
 			room.Ready(this, true);
@@ -132,7 +148,9 @@ class Player {
 		}
 	}
 	private void ClientDownPiece(int x,int y){
-		room.DownPiece(this, x, y);
+		synchronized(room){
+			room.DownPiece(this, x, y);
+		}
 	}
 	
 	public void RefalshReady(boolean Mine,boolean Fri){
@@ -148,5 +166,11 @@ class Player {
 	}
 	public void RefalshWinner(int r){
 		this.SentClient("{\"ac\":\"Winner\",\"color\":"+r+"}");
+	}
+	public void RefalshReEnterRoom(){
+		//System.out.println("{\"ac\":\"ReEnterRoom\"}");
+		this.SentClient("{\"ac\":\"ReEnterRoom\"}"); //您的对手已经离开房间
+		this.room = null;
+		this.room.ExitRoom(this, true);
 	}
 }
