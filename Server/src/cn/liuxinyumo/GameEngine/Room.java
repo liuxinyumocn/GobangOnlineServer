@@ -161,6 +161,19 @@ class Room {
 		A.SetReady(false);
 		B.SetReady(false);
 	}
+	public void Defeat(Player p){
+		PlayerInfo pi = this.GetPlayerInfo(p);
+		if(pi == null)
+			return; //无效棋手
+		if(!this.Started){
+			//无效动作
+			return;
+		}
+		int winner = pi.GetColor() == 1 ? 2 : 1;
+		A.RefalshWinner(winner);
+		B.RefalshWinner(winner);
+		this.InitNewGame();
+	}
 	/*
 	public boolean Enter(Player player){ //玩家进入房间消息
 		if(IsStarted())

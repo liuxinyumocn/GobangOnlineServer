@@ -49,8 +49,11 @@ class Player {
 				break;
 				case "Down":
 					int x = Integer.parseInt(json.getString("x"));
-					int y = Integer.parseInt(json.getString("y"));
+					int y = Integer.parseInt(json.getString("y"));  
 					this.ClientDownPiece(x,y);
+				break;
+				case "Defeat":
+					this.ClientDefeat();
 				break;
 			}
 			
@@ -137,21 +140,38 @@ class Player {
 		}
 	}
 	private void ClientSetReady(String v){	//Client是来自客户的
-		if(room == null){
-			this.RefalshReEnterRoom();
-			return;
-		}
-		if(v.equals("1")){
-			//变更为准备
-			room.Ready(this, true);
-		}else{
-			//取消准备
-			room.Ready(this, false);
+		try{
+			if(room == null){
+				this.RefalshReEnterRoom();
+				return;
+			}
+			if(v.equals("1")){
+				//变更为准备
+				room.Ready(this, true);
+			}else{
+				//取消准备
+				room.Ready(this, false);
+			}
+		}catch(Exception e){
+			
 		}
 	}
 	private void ClientDownPiece(int x,int y){
-		synchronized(room){
-			room.DownPiece(this, x, y);
+		try{
+			synchronized(room){
+				room.DownPiece(this, x, y);
+			}
+		}catch(Exception e){
+			
+		}
+	}
+	private void ClientDefeat(){ //认输
+		try{
+			synchronized(room){
+				room.Defeat(this);
+			}
+		}catch(Exception e){
+		
 		}
 	}
 	
