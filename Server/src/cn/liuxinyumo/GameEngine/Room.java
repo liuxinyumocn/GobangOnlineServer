@@ -97,16 +97,21 @@ class Room {
 			//如果在游戏中则结束游戏
 			if(A == pi){
 				A = null;
-				if(B != null)
+				if(B != null){
 					B.RefalshReEnterRoom();
+					//System.out.println("通知B重新进入房间");
+				}
 				//A = null;
 			}else if(B == pi){
 				B = null;
-				if(A != null)
+				if(A != null){
 					A.RefalshReEnterRoom();
+					//System.out.println("通知A重新进入房间");
+				}
 			}
 			if(A == null && B == null){
 				//房间解散
+				//System.out.print("&&房间解散");
 				roomConsole.DelRoom(this);
 			}
 		}

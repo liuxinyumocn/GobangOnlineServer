@@ -59,6 +59,9 @@ class RoomConsole {
 	public void DelRoom(Room r){
 		Rooms.remove(r);
 	}
+	public int GetRoomTotal(){
+		return this.Rooms.size();
+	}
 }
 
 class PlayerRoomInfo{

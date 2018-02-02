@@ -21,6 +21,14 @@ public class Server {
 		port = p;
 	}
 	
+	public int GetOnlinePlayerTotal(){
+		return playerConsole.GetOnlinePlayerTotal();
+	}
+	
+	public int GetRoomTotal(){
+		return roomConsole.GetRoomTotal();
+	}
+	
 	public void Start() throws Exception{
 		//启动游戏服务器
 		//如若启动失败 则抛出异常

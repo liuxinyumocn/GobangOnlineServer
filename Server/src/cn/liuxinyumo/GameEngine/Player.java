@@ -67,7 +67,9 @@ class Player {
 					ParserData(input.GetNext());
 				}
 			}catch(Exception e){
-				e.printStackTrace();
+				//接受超时则回收用户
+				Destructor();
+				//e.printStackTrace();
 			}
 		}
 	}
@@ -170,7 +172,7 @@ class Player {
 	public void RefalshReEnterRoom(){
 		//System.out.println("{\"ac\":\"ReEnterRoom\"}");
 		this.SentClient("{\"ac\":\"ReEnterRoom\"}"); //您的对手已经离开房间
-		this.room = null;
 		this.room.ExitRoom(this, true);
+		this.room = null;
 	}
 }

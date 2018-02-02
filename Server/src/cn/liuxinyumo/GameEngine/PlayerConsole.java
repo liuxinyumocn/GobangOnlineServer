@@ -30,4 +30,7 @@ class PlayerConsole {
 	public void Del(Player p){
 		players.remove(p);
 	}
+	public int GetOnlinePlayerTotal(){
+		return players.size();
+	}
 }
